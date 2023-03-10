@@ -1,12 +1,9 @@
-#include "Paddle.h"
-
-extern const int G_WIDTH;
-extern const int G_HEIGHT;
+#include "Paddle.hpp"
 
 void
 Paddle::moveRight(float deltaTime)
 {
-	if (m_pos_x0 > 0 && m_pos_x0 + m_length < G_WIDTH) {
+	if (m_pos_x0 > 0 && m_pos_x0 + m_length < m_screen_width) {
 		m_pos_x0 = m_pos_x0 + deltaTime * m_speed;
 	} else {
 		// Toggling effect
@@ -17,7 +14,7 @@ Paddle::moveRight(float deltaTime)
 void
 Paddle::moveLeft(float deltaTime)
 {
-	if (m_pos_x0 > 0 && m_pos_x0 + m_length < G_WIDTH) {
+	if (m_pos_x0 > 0 && m_pos_x0 + m_length < m_screen_width) {
 		m_pos_x0 = m_pos_x0 - deltaTime * m_speed;
 	} else {
 		// Toggling effect
@@ -56,12 +53,14 @@ Paddle::setPos(int x0, int y0)
 	m_pos_y0 = y0;
 }
 
-Paddle::Paddle()
-	: m_pos_x0(G_WIDTH/2 - 25)
-	, m_pos_y0(G_HEIGHT - 20)
+Paddle::Paddle(unsigned short w, unsigned short h)
+	: m_pos_x0(w/2 - 25)
+	, m_pos_y0(h - 20)
 	, m_height(10)
 	, m_length(50)	
 	, m_speed(1)
+	, m_screen_width(w)
+	, m_screen_height(h)
 {}
 
 Paddle::~Paddle() = default;

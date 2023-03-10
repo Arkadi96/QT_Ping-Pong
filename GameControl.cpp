@@ -1,8 +1,10 @@
 #include "GameControl.hpp"
+#include "Paddle.hpp"
+
 #include <iostream>
 
 QGraphicsView*
-GameControl::createView()
+GameControl::createView(QGraphicsScene* m_scene)
 {
     QGraphicsView* view = new QGraphicsView(m_scene);
 	
@@ -10,9 +12,9 @@ GameControl::createView()
 }
 
 QGraphicsRectItem*
-GameControl::CreatePaddle()
+GameControl::createPaddle()
 {
-	Paddle* paddle = new Paddle();
+	Paddle* paddle = new Paddle(m_screen_width, m_screen_height);
 	QGraphicsRectItem* paddleItem = paddle->getPaddle();	
 
 	return paddleItem;
@@ -22,7 +24,7 @@ QGraphicsScene*
 GameControl::createScene()
 {
     QGraphicsScene* scene = new QGraphicsScene();
-    scene->setSceneRect(0, 0, G_WIDTH, G_HEIGHT);
+    scene->setSceneRect(0, 0, m_screen_width, m_screen_height);
 
 	return scene;
 }
@@ -36,19 +38,21 @@ GameControl::onUpdate()
 void
 GameControl::setConnect()
 {
-	connect(m_time, SIGNAL(timeout()),
-		this, SLOT(update()));
+	connect(m_timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
+	m_timer->start(1000);
 }
 
 void
-GameControl::initTime()
+GameControl::initTimer()
 {
-	m_time = new QTime();
+	m_timer = new QTimer();
 }
 
 void
-GameControl::initGraphics()
+GameControl::initGraphics(unsigned short w, unsigned short h)
 {
+	m_screen_width = w;
+	m_screen_height = h;
 	m_scene = createScene();
 	m_paddle = createPaddle();
 	m_scene->addItem(m_paddle);
@@ -57,9 +61,9 @@ GameControl::initGraphics()
     m_view->show();
 }
 
-GameControl::GameControl()
+GameControl::GameControl(unsigned short w, unsigned short h)
 {
-	initTime();
-	initGraphics();
+	initTimer();
+	initGraphics(w, h);
 	setConnect();
 }

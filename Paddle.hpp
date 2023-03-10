@@ -13,6 +13,8 @@ class Paddle
 		int m_length;
 		int m_speed;
 
+		unsigned short m_screen_width;
+		unsigned short m_screen_height;
 	public:
 		void setPos(int, int);
 		void setLength(int);
@@ -24,7 +26,7 @@ class Paddle
 		void moveRight(float);
 
 	public:
-		Paddle(); 
+		Paddle(unsigned short, unsigned short); 
 		~Paddle();		
 };
 
