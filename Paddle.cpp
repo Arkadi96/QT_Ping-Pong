@@ -1,5 +1,12 @@
 #include "Paddle.hpp"
 
+Paddle&
+Paddle::get(unsigned short w, unsigned short h)
+{
+	static Paddle p(w,h);
+	return p;
+}
+
 void
 Paddle::moveRight(float deltaTime)
 {

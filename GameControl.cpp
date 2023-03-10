@@ -14,7 +14,7 @@ GameControl::createView(QGraphicsScene* m_scene)
 QGraphicsRectItem*
 GameControl::createPaddle()
 {
-	Paddle* paddle = new Paddle(m_screen_width, m_screen_height);
+	Paddle* paddle = &Paddle::get(m_screen_width, m_screen_height);
 	QGraphicsRectItem* paddleItem = paddle->getPaddle();	
 
 	return paddleItem;

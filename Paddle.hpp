@@ -5,6 +5,9 @@
 
 class Paddle 
 {
+	public:
+		static Paddle& get(unsigned short, unsigned short);
+	
 	private:
 		int m_pos_x0;
 		int m_pos_y0;
@@ -15,6 +18,7 @@ class Paddle
 
 		unsigned short m_screen_width;
 		unsigned short m_screen_height;
+
 	public:
 		void setPos(int, int);
 		void setLength(int);
