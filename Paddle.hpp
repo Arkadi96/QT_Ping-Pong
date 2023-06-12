@@ -3,35 +3,35 @@
 
 #include <QGraphicsRectItem>
 
-class Paddle 
+class Paddle
 {
-	public:
-		static Paddle& get(unsigned short, unsigned short);
-	
-	private:
-		int m_pos_x0;
-		int m_pos_y0;
+public:
+    static Paddle& get(unsigned short, unsigned short);
 
-		int m_height;
-		int m_length;
-		int m_speed;
+private:
+    int m_pos_x0;
+    int m_pos_y0;
 
-		unsigned short m_screen_width;
-		unsigned short m_screen_height;
+    int m_height;
+    int m_length;
+    int m_speed;
 
-	public:
-		void setPos(int, int);
-		void setLength(int);
-		void setSpeed(int);
+    unsigned short m_screen_width;
+    unsigned short m_screen_height;
 
-		QGraphicsRectItem* getPaddle();
-		
-		void moveLeft(float);
-		void moveRight(float);
+public:
+    void setPos(int, int);
+    void setLength(int);
+    void setSpeed(int);
 
-	public:
-		Paddle(unsigned short, unsigned short); 
-		~Paddle();		
+    QGraphicsRectItem* getPaddle();
+
+    void moveLeft(float);
+    void moveRight(float);
+
+public:
+    Paddle(unsigned short, unsigned short);
+    ~Paddle();
 };
 
 #endif

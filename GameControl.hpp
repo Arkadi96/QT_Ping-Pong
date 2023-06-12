@@ -14,8 +14,8 @@ class GameControl : public QObject
 	private:
 		unsigned short m_screen_width;
 		unsigned short m_screen_height;
-		
-		QTimer* m_timer = nullptr;
+
+                QTimer* m_timer = nullptr;
 		QGraphicsScene* m_scene = nullptr;
 		QGraphicsView* m_view = nullptr;
 		QGraphicsRectItem* m_paddle = nullptr;
