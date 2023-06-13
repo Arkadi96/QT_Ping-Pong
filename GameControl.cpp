@@ -1,7 +1,14 @@
-#include "GameControl.hpp"
-#include "Paddle.hpp"
-
 #include <iostream>
+
+#include "GameControl.hpp"
+
+KeyInput*
+GameControl::createKeyInput()
+{
+    KeyInput* keyinput = new KeyInput();
+
+    return keyinput;
+}
 
 QGraphicsView*
 GameControl::createView(QGraphicsScene* m_scene)
@@ -11,13 +18,12 @@ GameControl::createView(QGraphicsScene* m_scene)
     return view;
 }
 
-QGraphicsRectItem*
-GameControl::createPaddle()
+Paddle*
+GameControl::createPaddle(float dt)
 {
-    Paddle* paddle = &Paddle::get(m_screen_width, m_screen_height);
-    QGraphicsRectItem* paddleItem = paddle->getPaddle();
+    Paddle* paddle = &Paddle::get(m_screen_width, m_screen_height, m_rate_ms);
 
-    return paddleItem;
+    return paddle;
 }
 
 QGraphicsScene*
@@ -48,14 +54,18 @@ GameControl::onUpdate()
 void
 GameControl::setConnect()
 {
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
-    m_timer->start(1000);
+    //connect(m_timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
+    connect(m_keyinput, &KeyInput::moveLeft, m_paddle, &Paddle::moveLeft);
+    connect(m_keyinput, &KeyInput::moveRight, m_paddle, &Paddle::moveRight);
+
+    m_timer->start(m_rate_ms);
 }
 
 void
-GameControl::initTimer()
+GameControl::initTimer(float dt)
 {
     m_timer = new QTimer();
+    m_rate_ms = dt;
 }
 
 void
@@ -64,16 +74,17 @@ GameControl::initGraphics(unsigned short w, unsigned short h)
     m_screen_width = w;
     m_screen_height = h;
     m_scene = createScene();
-    m_paddle = createPaddle();
-    m_scene->addItem(m_paddle);
+    m_paddle = createPaddle(dt);
+    m_keyinput = createKeyInput();
+    m_scene->addItem(m_paddle.getPaddleItem());
     m_view = createView(m_scene);
     m_view->setRenderHints(QPainter::Antialiasing);
     m_view->show();
 }
 
-GameControl::GameControl(unsigned short w, unsigned short h)
+GameControl::GameControl(unsigned short w, unsigned short h, float dt)
 {
-    initTimer();
+    initTimer(dt);
     initGraphics(w, h);
     setConnect();
 }

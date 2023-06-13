@@ -7,34 +7,41 @@
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
 
+#include "Paddle.hpp"
+#include "KeyInput.hpp"
+
 class GameControl : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	private:
-		unsigned short m_screen_width;
-		unsigned short m_screen_height;
+    private:
+        unsigned short m_screen_width;
+        unsigned short m_screen_height;
 
-                QTimer* m_timer = nullptr;
-		QGraphicsScene* m_scene = nullptr;
-		QGraphicsView* m_view = nullptr;
-		QGraphicsRectItem* m_paddle = nullptr;
+        float m_rate_ms;
 
-	private:
-		void setConnect();
-		void initTimer();
-		void initGraphics(unsigned short, unsigned short);
+        QTimer* m_timer = nullptr;
+        QGraphicsScene* m_scene = nullptr;
+        QGraphicsView* m_view = nullptr;
+        QGraphicsRectItem* m_paddle = nullptr;
+        KeyInput* m_keyinput = nullptr;
 
-		QGraphicsView* createView(QGraphicsScene*);
-		QGraphicsScene* createScene();
-		QGraphicsRectItem* createPaddle();
+    private:
+        void setConnect();
+        void initTimer(float);
+        void initGraphics(unsigned short, unsigned short);
 
-	private slots:
-		void onUpdate();
+        QGraphicsView* createView(QGraphicsScene*);
+        QGraphicsScene* createScene();
+        Paddle* createPaddle();
+        KeyInput* createKeyInput();
 
-	public:
-		GameControl(unsigned short, unsigned short);
-		~GameControl() = default;
+    private slots:
+        void onUpdate();
+
+    public:
+        GameControl(unsigned short, unsigned short float);
+        ~GameControl() = default;
 };
 
 #endif
