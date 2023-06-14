@@ -1,41 +1,44 @@
 #ifndef PADDLE_HPP
 #define PADDLE_HPP
 
+#include <QObject>
 #include <QGraphicsRectItem>
 
-class Paddle
+class Paddle : public QObject
 {
-public:
-    static Paddle& get(unsigned short, unsigned short, float);
+    Q_OBJECT
 
-public slots:
-    void moveLeft();
-    void moveRight();
+    public:
+        static Paddle& get(QObject*, unsigned short, unsigned short, float);
 
-private:
-    int m_pos_x0;
-    int m_pos_y0;
+    public slots:
+        void moveLeft();
+        void moveRight();
 
-    int m_height;
-    int m_length;
-    int m_speed;
-    float m_dt_ms;
+    private:
+        int m_pos_x0;
+        int m_pos_y0;
 
-    unsigned short m_screen_width;
-    unsigned short m_screen_height;
+        int m_height;
+        int m_length;
+        int m_speed;
+        float m_dt_ms;
+
+        unsigned short m_screen_width;
+        unsigned short m_screen_height;
 
 
-public:
-    void setPos(int, int);
-    void setLength(int);
-    void setSpeed(int);
-    void setDeltaTime(float);
+    public:
+        void setPos(int, int);
+        void setLength(int);
+        void setSpeed(int);
+        void setDeltaTime(float);
 
-    QGraphicsRectItem* getPaddleItem();
+        QGraphicsRectItem* getPaddleItem();
 
-public:
-    Paddle(unsigned short, unsigned short, float);
-    ~Paddle();
+    public:
+        Paddle(QObject*, unsigned short, unsigned short, float);
+        ~Paddle();
 };
 
 #endif

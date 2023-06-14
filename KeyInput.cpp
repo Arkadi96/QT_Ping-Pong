@@ -1,13 +1,20 @@
+#include <iostream>
+
 #include "KeyInput.hpp"
 
 void
-KeyInput::KeyPressEvent(QKeyEvent *event)
+KeyInput::keyPressEvent(QKeyEvent* event)
 {
-    if (event->Key() == Qt::Key_Right) {
+    std::cout << "key is pressed\n";
+    if (event->key() == Qt::Key_Right) {
         emit moveRight();
-    } else if (event->Key() == Qt::Key_Left) {
+    } else if (event->key() == Qt::Key_Left) {
         emit moveLeft();
     } else {
-        QWidget::KeyPressEvent(event);
+        QWidget::keyPressEvent(event);
     }
 }
+
+KeyInput::KeyInput()
+    : QWidget()
+{}

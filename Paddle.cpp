@@ -1,17 +1,19 @@
+#include <iostream>
+
 #include "Paddle.hpp"
 
 Paddle&
-Paddle::get(unsigned short w, unsigned short h, float dt)
+Paddle::get(QObject *p, unsigned short w, unsigned short h, float dt)
 {
-    static Paddle p(w,h,dt);
-    return p;
+    static Paddle paddle(p,w,h,dt);
+    return paddle;
 }
 
 void
-Paddle::moveRight(float dt)
+Paddle::moveRight()
 {
     if (m_pos_x0 > 0 && m_pos_x0 + m_length < m_screen_width) {
-        m_pos_x0 = m_pos_x0 + dt * m_speed;
+        m_pos_x0 = m_pos_x0 + m_dt_ms * m_speed;
     } else {
         // Toggling effect
         m_pos_x0 = m_pos_x0 - 5;
@@ -19,10 +21,11 @@ Paddle::moveRight(float dt)
 }
 
 void
-Paddle::moveLeft(float dt)
+Paddle::moveLeft()
 {
+    std::cout << "left\n";
     if (m_pos_x0 > 0 && m_pos_x0 + m_length < m_screen_width) {
-        m_pos_x0 = m_pos_x0 - dt * m_speed;
+        m_pos_x0 = m_pos_x0 - m_dt_ms * m_speed;
     } else {
         // Toggling effect
         m_pos_x0 = m_pos_x0 + 5;
@@ -56,6 +59,7 @@ Paddle::setSpeed(int s)
 void
 Paddle::setLength(int l)
 {
+    std::cout << "length changed\n";
     m_length = l;
 }
 
@@ -66,15 +70,16 @@ Paddle::setPos(int x0, int y0)
     m_pos_y0 = y0;
 }
 
-Paddle::Paddle(unsigned short w, unsigned short h, float dt)
-    : m_pos_x0(w/2 - 25)
+Paddle::Paddle(QObject *p, unsigned short w, unsigned short h, float dt)
+    : QObject(p)
+    , m_pos_x0(w/2 - 25)
     , m_pos_y0(h - 20)
     , m_height(10)
     , m_length(50)
     , m_speed(1)
+    , m_dt_ms(dt)
     , m_screen_width(w)
     , m_screen_height(h)
-    , m_dt_ms(dt)
 {}
 
 Paddle::~Paddle() = default;

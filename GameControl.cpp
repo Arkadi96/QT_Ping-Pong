@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 
 #include "GameControl.hpp"
 
@@ -19,9 +20,9 @@ GameControl::createView(QGraphicsScene* m_scene)
 }
 
 Paddle*
-GameControl::createPaddle(float dt)
+GameControl::createPaddle(QObject* p)
 {
-    Paddle* paddle = &Paddle::get(m_screen_width, m_screen_height, m_rate_ms);
+    Paddle* paddle = &Paddle::get(p, m_screen_width, m_screen_height, m_rate_ms);
 
     return paddle;
 }
@@ -54,7 +55,10 @@ GameControl::onUpdate()
 void
 GameControl::setConnect()
 {
-    //connect(m_timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
+    assert(m_keyinput != nullptr);
+    assert(m_paddle != nullptr);
+    m_paddle->setLength(300);
     connect(m_keyinput, &KeyInput::moveLeft, m_paddle, &Paddle::moveLeft);
     connect(m_keyinput, &KeyInput::moveRight, m_paddle, &Paddle::moveRight);
 
@@ -74,9 +78,10 @@ GameControl::initGraphics(unsigned short w, unsigned short h)
     m_screen_width = w;
     m_screen_height = h;
     m_scene = createScene();
-    m_paddle = createPaddle(dt);
+    m_paddle = createPaddle(m_scene);
     m_keyinput = createKeyInput();
-    m_scene->addItem(m_paddle.getPaddleItem());
+    m_scene->addItem(m_paddle->getPaddleItem());
+    m_scene->addWidget(m_keyinput);
     m_view = createView(m_scene);
     m_view->setRenderHints(QPainter::Antialiasing);
     m_view->show();

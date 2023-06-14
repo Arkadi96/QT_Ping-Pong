@@ -14,10 +14,10 @@ class KeyInput : public QWidget
         void moveRight();
 
     protected:
-        void KeyPressEvent(QKeyEvent*) override;
+        void keyPressEvent(QKeyEvent*) override;
 
     public:
-        KeyInput() = default;
+        KeyInput();
         ~KeyInput() = default;
 };
 

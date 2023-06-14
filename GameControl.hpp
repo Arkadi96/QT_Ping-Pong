@@ -23,7 +23,7 @@ class GameControl : public QObject
         QTimer* m_timer = nullptr;
         QGraphicsScene* m_scene = nullptr;
         QGraphicsView* m_view = nullptr;
-        QGraphicsRectItem* m_paddle = nullptr;
+        Paddle* m_paddle = nullptr;
         KeyInput* m_keyinput = nullptr;
 
     private:
@@ -33,14 +33,14 @@ class GameControl : public QObject
 
         QGraphicsView* createView(QGraphicsScene*);
         QGraphicsScene* createScene();
-        Paddle* createPaddle();
+        Paddle* createPaddle(QObject*);
         KeyInput* createKeyInput();
 
     private slots:
         void onUpdate();
 
     public:
-        GameControl(unsigned short, unsigned short float);
+        GameControl(unsigned short, unsigned short, float);
         ~GameControl() = default;
 };
 
