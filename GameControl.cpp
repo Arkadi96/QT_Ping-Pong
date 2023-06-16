@@ -3,12 +3,21 @@
 
 #include "GameControl.hpp"
 
+QGraphicsRectItem*
+GameControl::createRectItem()
+{
+    assert(m_paddle != nullptr);
+    QGraphicsRectItem* rectItem = m_paddle->getPaddleItem();
+
+    return rectItem;
+}
+
 QTimer*
 GameControl::createTimer()
 {
-    m_timer = new QTimer();
+    QTimer* timer = new QTimer();
 
-    return m_timer;
+    return timer;
 }
 
 QRectF*
@@ -36,9 +45,10 @@ GameControl::createView()
     assert(m_scene != nullptr);
     assert(m_sceneRect != nullptr);
     assert(m_proxy != nullptr);
+    assert(m_rect != nullptr);
 
     m_scene->addItem(m_proxy);
-    m_scene->addItem(m_paddle->getPaddleItem());
+    m_scene->addItem(m_rect);
 
     QGraphicsView* view = new QGraphicsView(m_scene);
     view->setFixedSize(m_sceneRect->width(), m_sceneRect->height());
@@ -90,30 +100,31 @@ GameControl::createProxyWidget()
 void
 GameControl::onUpdate()
 {
-    // if left is pressed
-        // move Paddle left
-    // else
-        // move Paddle right
+    assert(m_view != nullptr);
+    assert(m_scene != nullptr);
+    assert(m_rect != nullptr);
 
-    // Ball physics update
-
-    // Check for the collision, if true
-        // change Ball moving vector
-
-    std::cout << "hi\n";
+    // updating rect item
+    m_scene->removeItem(m_rect);
+    m_rect = nullptr;
+    m_rect = createRectItem();
+    m_scene->addItem(m_rect);
+    m_view->update();
 }
 
 void
 GameControl::setConnect()
 {
-//    connect(m_timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
     assert(m_keyinput != nullptr);
     assert(m_paddle != nullptr);
-//    m_paddle->setLength(300);
-  //  connect(m_keyinput, &KeyInput::moveLeft, m_paddle, &Paddle::moveLeft);
-    //connect(m_keyinput, &KeyInput::moveRight, m_paddle, &Paddle::moveRight);
 
-    m_timer->start(m_rate_ms);
+    connect(m_keyinput, &KeyInput::moveLeft, m_paddle, &Paddle::moveLeft);
+    connect(m_keyinput, &KeyInput::moveRight, m_paddle, &Paddle::moveRight);
+    connect(m_paddle, &Paddle::paddleUpdated, this, &GameControl::onUpdate);
+
+    //    connect(m_timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
+
+ //   m_timer->start(m_rate_ms);
 }
 
 void
@@ -133,10 +144,12 @@ GameControl::initGraphics(unsigned short w, unsigned short h, float dt)
     m_proxy = createProxyWidget();
 //    std::cout << "Paddle\n";
     m_paddle = createPaddle();
+//    std::cout << "Rect\n";
+    m_rect = createRectItem();
 //    std::cout << "View\n";
     m_view = createView();
 //    std::cout << "Timer\n";
-    m_timer = createTimer();
+//    m_timer = createTimer();
 }
 
 GameControl::GameControl(unsigned short w, unsigned short h, float dt)

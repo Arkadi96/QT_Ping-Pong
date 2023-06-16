@@ -16,15 +16,18 @@ class GameControl : public QObject
 {
     Q_OBJECT
 
+    private slots:
+        void onUpdate();
+
     private:
         unsigned short m_screen_width;
         unsigned short m_screen_height;
-
         float m_rate_ms;
 
         QGraphicsScene* m_scene = nullptr;
         QGraphicsView* m_view = nullptr;
         QGraphicsProxyWidget* m_proxy = nullptr;
+        QGraphicsRectItem* m_rect = nullptr;
         QRectF* m_sceneRect = nullptr;
         QTimer* m_timer = nullptr;
         Paddle* m_paddle = nullptr;
@@ -37,13 +40,11 @@ class GameControl : public QObject
         QGraphicsView* createView();
         QGraphicsScene* createScene();
         QGraphicsProxyWidget* createProxyWidget();
+        QGraphicsRectItem* createRectItem();
         QRectF* createSceneRect();
         QTimer* createTimer();
         Paddle* createPaddle();
         KeyInput* createKeyInput();
-
-    private slots:
-        void onUpdate();
 
     public:
         GameControl(unsigned short, unsigned short, float);

@@ -15,6 +15,9 @@ class Paddle : public QObject
         void moveLeft();
         void moveRight();
 
+    signals:
+        void paddleUpdated();
+
     private:
         int m_pos_x0;
         int m_pos_y0;

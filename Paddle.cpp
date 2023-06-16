@@ -12,34 +12,35 @@ Paddle::get(QObject *p, unsigned short w, unsigned short h, float dt)
 void
 Paddle::moveRight()
 {
-    if (m_pos_x0 > 0 && m_pos_x0 + m_length < m_screen_width) {
-        m_pos_x0 = m_pos_x0 + m_dt_ms * m_speed;
+    int step = (int)m_dt_ms/100 * m_speed;
+    if (m_pos_x0 + m_length + step < m_screen_width) {
+        m_pos_x0 += step;
     } else {
-        // Toggling effect
-        m_pos_x0 = m_pos_x0 - 5;
+        m_pos_x0 = m_pos_x0 - step/2;
     }
+    emit paddleUpdated();
 }
 
 void
 Paddle::moveLeft()
 {
-    std::cout << "left\n";
-    if (m_pos_x0 > 0 && m_pos_x0 + m_length < m_screen_width) {
-        m_pos_x0 = m_pos_x0 - m_dt_ms * m_speed;
+    int step = (int)m_dt_ms/100 * m_speed;
+    if (m_pos_x0 - step > 0) {
+        m_pos_x0 -= step;
     } else {
-        // Toggling effect
-        m_pos_x0 = m_pos_x0 + 5;
+        m_pos_x0 = m_pos_x0 + step/2;
     }
+    emit paddleUpdated();
 }
 
 QGraphicsRectItem*
 Paddle::getPaddleItem()
 {
     QGraphicsRectItem* paddle = new QGraphicsRectItem(
-    m_pos_x0,
-    m_pos_y0,
-    m_length,
-    m_height);
+        m_pos_x0,
+        m_pos_y0,
+        m_length,
+        m_height);
 
     return paddle;
 }
