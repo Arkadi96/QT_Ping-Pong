@@ -1,7 +1,9 @@
 #include <QApplication>
+//#include <QWidget>
 
 // User to add headers here
 #include "GameControl.hpp"
+//#include "KeyInput.hpp"
 
 #define G_WIDTH 360
 #define G_HEIGHT 640

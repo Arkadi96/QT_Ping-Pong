@@ -6,6 +6,8 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
+#include <QGraphicsProxyWidget>
+#include <QRectF>
 
 #include "Paddle.hpp"
 #include "KeyInput.hpp"
@@ -20,20 +22,24 @@ class GameControl : public QObject
 
         float m_rate_ms;
 
-        QTimer* m_timer = nullptr;
         QGraphicsScene* m_scene = nullptr;
         QGraphicsView* m_view = nullptr;
+        QGraphicsProxyWidget* m_proxy = nullptr;
+        QRectF* m_sceneRect = nullptr;
+        QTimer* m_timer = nullptr;
         Paddle* m_paddle = nullptr;
         KeyInput* m_keyinput = nullptr;
 
     private:
         void setConnect();
-        void initTimer(float);
-        void initGraphics(unsigned short, unsigned short);
+        void initGraphics(unsigned short, unsigned short, float);
 
-        QGraphicsView* createView(QGraphicsScene*);
+        QGraphicsView* createView();
         QGraphicsScene* createScene();
-        Paddle* createPaddle(QObject*);
+        QGraphicsProxyWidget* createProxyWidget();
+        QRectF* createSceneRect();
+        QTimer* createTimer();
+        Paddle* createPaddle();
         KeyInput* createKeyInput();
 
     private slots:
