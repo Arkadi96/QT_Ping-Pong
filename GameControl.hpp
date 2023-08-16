@@ -27,7 +27,8 @@ class GameControl : public QObject
         QGraphicsScene* m_scene = nullptr;
         QGraphicsView* m_view = nullptr;
         QGraphicsProxyWidget* m_proxy = nullptr;
-        QGraphicsRectItem* m_rect = nullptr;
+        QGraphicsRectItem* m_first_rect = nullptr;
+        QGraphicsRectItem* m_second_rect = nullptr;
         QRectF* m_sceneRect = nullptr;
         QTimer* m_timer = nullptr;
         Paddle* m_first_paddle = nullptr;
@@ -41,7 +42,8 @@ class GameControl : public QObject
         QGraphicsView* createView();
         QGraphicsScene* createScene();
         QGraphicsProxyWidget* createProxyWidget();
-        QGraphicsRectItem* createRectItem();
+        QGraphicsRectItem* createFirstRectItem();
+        QGraphicsRectItem* createSecondRectItem();
         QRectF* createSceneRect();
         QTimer* createTimer();
         Paddle* createFirstPaddle();

@@ -8,9 +8,6 @@ class Paddle : public QObject
 {
     Q_OBJECT
 
-    public:
-        static Paddle& get(QObject*, unsigned short, unsigned short, float);
-
     public slots:
         void moveLeft();
         void moveRight();

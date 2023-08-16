@@ -4,14 +4,17 @@
 #include <QObject>
 #include <QWidget>
 #include <QKeyEvent>
+#include <thread>
 
 class KeyInput : public QWidget
 {
     Q_OBJECT
 
     signals:
-        void moveLeft();
-        void moveRight();
+        void moveLeftArrow();
+        void moveRightArrow();
+        void moveLeftLetter();
+        void moveRightLetter();
 
     protected:
         void keyPressEvent(QKeyEvent*) override;

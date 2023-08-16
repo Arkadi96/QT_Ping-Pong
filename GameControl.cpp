@@ -4,10 +4,19 @@
 #include "GameControl.hpp"
 
 QGraphicsRectItem*
-GameControl::createRectItem()
+GameControl::createFirstRectItem()
 {
     assert(m_first_paddle != nullptr);
     QGraphicsRectItem* rectItem = m_first_paddle->getPaddleItem();
+
+    return rectItem;
+}
+
+QGraphicsRectItem*
+GameControl::createSecondRectItem()
+{
+    assert(m_second_paddle != nullptr);
+    QGraphicsRectItem* rectItem = m_second_paddle->getPaddleItem();
 
     return rectItem;
 }
@@ -45,10 +54,12 @@ GameControl::createView()
     assert(m_scene != nullptr);
     assert(m_sceneRect != nullptr);
     assert(m_proxy != nullptr);
-    assert(m_rect != nullptr);
+    assert(m_first_rect != nullptr);
+    assert(m_second_rect != nullptr);
 
     m_scene->addItem(m_proxy);
-    m_scene->addItem(m_rect);
+    m_scene->addItem(m_first_rect);
+    m_scene->addItem(m_second_rect);
 
     QGraphicsView* view = new QGraphicsView(m_scene);
     view->setFixedSize(m_sceneRect->width(), m_sceneRect->height());
@@ -64,7 +75,7 @@ Paddle*
 GameControl::createFirstPaddle()
 {
     assert(m_scene != nullptr);
-    Paddle* paddle = &Paddle::get(
+    Paddle* paddle = new Paddle(
         (QObject*)m_scene,
         m_screen_width,
         m_screen_height,
@@ -81,7 +92,7 @@ Paddle*
 GameControl::createSecondPaddle()
 {
     assert(m_scene != nullptr);
-    Paddle* paddle = &Paddle::get(
+    Paddle* paddle = new Paddle(
         (QObject*)m_scene,
         m_screen_width,
         m_screen_height,
@@ -123,13 +134,18 @@ GameControl::onUpdate()
 {
     assert(m_view != nullptr);
     assert(m_scene != nullptr);
-    assert(m_rect != nullptr);
+    assert(m_first_rect != nullptr);
+    assert(m_second_rect != nullptr);
 
     // updating rect item
-    m_scene->removeItem(m_rect);
-    m_rect = nullptr;
-    m_rect = createRectItem();
-    m_scene->addItem(m_rect);
+    m_scene->removeItem(m_first_rect);
+    m_scene->removeItem(m_second_rect);
+    m_first_rect = nullptr;
+    m_second_rect = nullptr;
+    m_first_rect = createFirstRectItem();
+    m_second_rect = createSecondRectItem();
+    m_scene->addItem(m_first_rect);
+    m_scene->addItem(m_second_rect);
     m_view->update();
 }
 
@@ -138,10 +154,14 @@ GameControl::setConnect()
 {
     assert(m_keyinput != nullptr);
     assert(m_first_paddle != nullptr);
+    assert(m_second_paddle != nullptr);
 
-    connect(m_keyinput, &KeyInput::moveLeft, m_first_paddle, &Paddle::moveLeft);
-    connect(m_keyinput, &KeyInput::moveRight, m_first_paddle, &Paddle::moveRight);
+    connect(m_keyinput, &KeyInput::moveLeftArrow, m_first_paddle, &Paddle::moveLeft);
+    connect(m_keyinput, &KeyInput::moveRightArrow, m_first_paddle, &Paddle::moveRight);
+    connect(m_keyinput, &KeyInput::moveRightLetter, m_second_paddle, &Paddle::moveLeft);
+    connect(m_keyinput, &KeyInput::moveLeftLetter, m_second_paddle, &Paddle::moveRight);
     connect(m_first_paddle, &Paddle::paddleUpdated, this, &GameControl::onUpdate);
+    connect(m_second_paddle, &Paddle::paddleUpdated, this, &GameControl::onUpdate);
 
     //    connect(m_timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
 
@@ -166,8 +186,10 @@ GameControl::initGraphics(unsigned short w, unsigned short h, float dt)
 //    std::cout << "Paddle\n";
     m_first_paddle = createFirstPaddle();
     m_second_paddle = createSecondPaddle();
+    assert(m_first_paddle != m_second_paddle);
 //    std::cout << "Rect\n";
-    m_rect = createRectItem();
+    m_first_rect = createFirstRectItem();
+    m_second_rect = createSecondRectItem();
 //    std::cout << "View\n";
     m_view = createView();
 //    std::cout << "Timer\n";

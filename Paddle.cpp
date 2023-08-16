@@ -2,13 +2,6 @@
 
 #include "Paddle.hpp"
 
-Paddle&
-Paddle::get(QObject *p, unsigned short w, unsigned short h, float dt)
-{
-    static Paddle paddle(p,w,h,dt);
-    return paddle;
-}
-
 void
 Paddle::moveRight()
 {
