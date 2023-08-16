@@ -34,6 +34,7 @@ class Paddle : public QObject
     public:
         void setPos(int, int);
         void setLength(int);
+        void setHeight(int);
         void setSpeed(int);
         void setDeltaTime(float);
 

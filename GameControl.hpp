@@ -30,7 +30,8 @@ class GameControl : public QObject
         QGraphicsRectItem* m_rect = nullptr;
         QRectF* m_sceneRect = nullptr;
         QTimer* m_timer = nullptr;
-        Paddle* m_paddle = nullptr;
+        Paddle* m_first_paddle = nullptr;
+        Paddle* m_second_paddle = nullptr;
         KeyInput* m_keyinput = nullptr;
 
     private:
@@ -43,7 +44,8 @@ class GameControl : public QObject
         QGraphicsRectItem* createRectItem();
         QRectF* createSceneRect();
         QTimer* createTimer();
-        Paddle* createPaddle();
+        Paddle* createFirstPaddle();
+        Paddle* createSecondPaddle();
         KeyInput* createKeyInput();
 
     public:

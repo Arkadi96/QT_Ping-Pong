@@ -6,8 +6,8 @@
 QGraphicsRectItem*
 GameControl::createRectItem()
 {
-    assert(m_paddle != nullptr);
-    QGraphicsRectItem* rectItem = m_paddle->getPaddleItem();
+    assert(m_first_paddle != nullptr);
+    QGraphicsRectItem* rectItem = m_first_paddle->getPaddleItem();
 
     return rectItem;
 }
@@ -61,7 +61,7 @@ GameControl::createView()
 }
 
 Paddle*
-GameControl::createPaddle()
+GameControl::createFirstPaddle()
 {
     assert(m_scene != nullptr);
     Paddle* paddle = &Paddle::get(
@@ -69,6 +69,27 @@ GameControl::createPaddle()
         m_screen_width,
         m_screen_height,
         m_rate_ms);
+
+    paddle->setHeight(10);
+    paddle->setLength(50);
+    paddle->setPos(m_screen_width/2 - 25, m_screen_height - 20);
+
+    return paddle;
+}
+
+Paddle*
+GameControl::createSecondPaddle()
+{
+    assert(m_scene != nullptr);
+    Paddle* paddle = &Paddle::get(
+        (QObject*)m_scene,
+        m_screen_width,
+        m_screen_height,
+        m_rate_ms);
+
+    paddle->setHeight(10);
+    paddle->setLength(50);
+    paddle->setPos(m_screen_width/2 - 25, 20);
 
     return paddle;
 }
@@ -116,11 +137,11 @@ void
 GameControl::setConnect()
 {
     assert(m_keyinput != nullptr);
-    assert(m_paddle != nullptr);
+    assert(m_first_paddle != nullptr);
 
-    connect(m_keyinput, &KeyInput::moveLeft, m_paddle, &Paddle::moveLeft);
-    connect(m_keyinput, &KeyInput::moveRight, m_paddle, &Paddle::moveRight);
-    connect(m_paddle, &Paddle::paddleUpdated, this, &GameControl::onUpdate);
+    connect(m_keyinput, &KeyInput::moveLeft, m_first_paddle, &Paddle::moveLeft);
+    connect(m_keyinput, &KeyInput::moveRight, m_first_paddle, &Paddle::moveRight);
+    connect(m_first_paddle, &Paddle::paddleUpdated, this, &GameControl::onUpdate);
 
     //    connect(m_timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
 
@@ -143,7 +164,8 @@ GameControl::initGraphics(unsigned short w, unsigned short h, float dt)
 //    std::cout << "Widget\n";
     m_proxy = createProxyWidget();
 //    std::cout << "Paddle\n";
-    m_paddle = createPaddle();
+    m_first_paddle = createFirstPaddle();
+    m_second_paddle = createSecondPaddle();
 //    std::cout << "Rect\n";
     m_rect = createRectItem();
 //    std::cout << "View\n";

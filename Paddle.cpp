@@ -60,8 +60,13 @@ Paddle::setSpeed(int s)
 void
 Paddle::setLength(int l)
 {
-    std::cout << "length changed\n";
     m_length = l;
+}
+
+void
+Paddle::setHeight(int h)
+{
+    m_height = h;
 }
 
 void
@@ -73,10 +78,10 @@ Paddle::setPos(int x0, int y0)
 
 Paddle::Paddle(QObject *p, unsigned short w, unsigned short h, float dt)
     : QObject(p)
-    , m_pos_x0(w/2 - 25)
-    , m_pos_y0(h - 20)
-    , m_height(10)
-    , m_length(50)
+    , m_pos_x0(0)
+    , m_pos_y0(0)
+    , m_height(0)
+    , m_length(0)
     , m_speed(1)
     , m_dt_ms(dt)
     , m_screen_width(w)
